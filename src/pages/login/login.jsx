@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import './login.less'
 import login from './images/mlogo.jpg'
-import { Form, Icon, Input, Button } from 'antd'
+import { Form, Icon, Input, Button, message } from 'antd'
+import { reqLogin } from '../../api/index'
+import memoryUtils from '../../utils/memoryUtils'
+import storageUtils from '../../utils/storageUtils'
+import { Redirect } from 'react-router-dom'
 const Item = Form.Item
 /**
  * 登录的路由组件
@@ -10,12 +14,22 @@ class Login extends Component {
   handleSubmit = (event) => {
     // 阻止事件的默认行为
     event.preventDefault()
-    this.props.form.validateFields((err, values) => {
+    this.props.form.validateFields(async (err, values) => {
       // 校验成功
+      const { username, password } = values
       if (!err) {
-        console.log('Received values of form: ', values)
-      }else{
-        console.log('校验失败');
+        const result = await reqLogin(username, password)
+        if (result.status === 0) {
+          message.success('登录成功')
+          const user = result.data
+          memoryUtils.user = user
+          storageUtils.savaUser(user)
+          this.props.history.replace('/')
+        } else {
+          message.error(result.msg)
+        }
+      } else {
+        message.error('校验失败')
       }
     })
   }
@@ -34,6 +48,11 @@ class Login extends Component {
     }
   }
   render() {
+    // 如果用户已经登录，自动跳转到管理页面
+    const user = memoryUtils.user
+    if (user && user._id) {
+      return <Redirect to="/"></Redirect>
+    }
     // 得到具强大功能的form对象
     const form = this.props.form
     const { getFieldDecorator } = form
@@ -58,7 +77,7 @@ class Login extends Component {
                     message: '用户名必须是英文、数字或下划线组成',
                   },
                 ],
-                initialValue: 'admin'
+                initialValue: 'admin',
               })(
                 <Input
                   prefix={
