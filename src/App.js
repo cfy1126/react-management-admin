@@ -1,9 +1,18 @@
-import './App.css';
+import './App.less'
+import React from 'react'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import Login from './pages/login/login'
+import Admin from './pages/admin/admin'
 
 function App() {
   return (
-   <div>hello world</div>
-  );
+    <BrowserRouter>
+      <Switch>
+        <Route path="/login" component={Login}></Route>
+        <Route path="/" component={Admin}></Route>
+      </Switch>
+    </BrowserRouter>
+  )
 }
 
-export default App;
+export default App
