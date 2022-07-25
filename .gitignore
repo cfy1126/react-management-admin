@@ -21,3 +21,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# custom
+/src_react-counter_redux_final
+/src_react_counter_redux
+/src_react_counter
+/src_redux_project
