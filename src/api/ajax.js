@@ -33,8 +33,4 @@ export default function ajax(url, data = {}, type = 'GET') {
   })
 }
 
-// 请求登录接口
-// ajax('/login',{username: 'Tom',password: '123456'},'POST').then()
 
-// 添加用户接口
-// ajax('/manage/user/add',{username: 'Tom',password: '123456'},'POST').then()
